@@ -18,39 +18,35 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
-// AI Enhancement prompt
-const ENHANCEMENT_PROMPT = `You are an expert UI/UX analyst and frontend developer. You receive a design specification package containing:
+// AI Enhancement prompt - PIXEL-PERFECT focused
+const ENHANCEMENT_PROMPT = `Ты эксперт по Pixel-Perfect верстке. Получаешь скриншот дизайна и техническую спецификацию.
 
-1. **Spec.md** - Technical specifications (dimensions, colors, typography, layout)
-2. **Spec.json** - Structured data
-3. **Screenshot** - Visual representation of the design
+ЗАДАЧА: Создать КРАТКУЮ спецификацию для точной верстки. Только критичные данные для Pixel-Perfect реализации.
 
-Your task is to analyze this package and generate an ENHANCED specification that:
+ВЫДАЙ В ФОРМАТЕ:
 
-1. **Visual Analysis**: Describe what you see in the screenshot - UI patterns, visual hierarchy, user flow
-2. **Semantic Structure**: Identify semantic meaning of elements (not just "Frame 1" but "Hero Section with CTA")
-3. **Component Recommendations**: Suggest appropriate React/Vue components or HTML semantic tags
-4. **Implementation Guide**: Provide specific code recommendations (layout, styling, behavior)
-5. **Accessibility**: Add ARIA attributes, keyboard navigation, screen reader considerations
-6. **Responsive Design**: Suggest breakpoints and mobile adaptations
-7. **UX Improvements**: Identify potential UX issues and suggest improvements
+## 🎯 Структура (HTML семантика)
+[Кратко: какие теги использовать]
 
-**Output Format:**
-Generate a markdown document with these sections:
-- # Enhanced Design Specification
-- ## Visual Analysis
-- ## Semantic Component Structure
-- ## Implementation Recommendations
-- ## Code Scaffolding Examples
-- ## Accessibility Guidelines
-- ## Responsive Considerations
-- ## UX/UI Insights
+## 📐 Размеры и отступы
+[Точные значения: width, height, padding, margin, gap]
 
-Be specific, actionable, and code-focused. Reference exact values from the technical specs.
+## 🎨 Стили
+[Цвета, шрифты, border-radius, shadows - точные значения]
 
----
+## 📱 Layout
+[Flexbox/Grid параметры: direction, justify, align, gap]
 
-**TECHNICAL SPECIFICATION:**
+## ⚠️ Важные детали
+[Что легко упустить при верстке]
+
+ПРАВИЛА:
+- Максимум 2000 символов
+- Только конкретные значения из спеки
+- Никаких общих советов
+- Только то что нужно для верстки
+
+СПЕЦИФИКАЦИЯ:
 `;
 
 /**
@@ -120,12 +116,12 @@ async function enhanceWithOpenAI(specMd, specJson, screenshot) {
     // Call GPT-4o API (supports vision)
     const response = await openai.chat.completions.create({
       model: 'gpt-4o', // Latest GPT-4 with vision support
-      max_tokens: 4096,
-      temperature: 0.7,
+      max_tokens: 2000, // Reduced for compact output
+      temperature: 0.3, // Lower temp for more focused output
       messages: [
         {
           role: 'system',
-          content: 'You are an expert UI/UX analyst and frontend developer specializing in design-to-code workflows. You provide detailed, actionable specifications for implementing designs in React, Vue, or HTML/CSS.'
+          content: 'Ты эксперт по Pixel-Perfect верстке. Даёшь КРАТКИЕ точные спецификации. Максимум 2000 символов. Только факты, никаких общих советов.'
         },
         {
           role: 'user',
