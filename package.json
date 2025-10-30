@@ -1,0 +1,17 @@
+{
+  "name": "specmint-api",
+  "version": "1.0.0",
+  "description": "SpecMint API server for AI-enhanced design specifications",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.17.0",
+    "openai": "^4.20.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
